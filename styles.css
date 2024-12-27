@@ -1,0 +1,140 @@
+/* General Reset */
+* {
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #121032;
+    color: white;
+    line-height: 1.6;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #121032;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav-links a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .signup-btn {
+    background-color: #000000;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+  .signup-btn:hover{
+    background-color: orange;
+  }
+  
+  .hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 2rem;
+    margin-left: 200px ;
+  }
+
+  
+  .text-content {
+    max-width: 50%;
+  }
+  
+  .text-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    
+  }
+  
+  .text-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  }
+  
+  .cta-button {
+    background-color: black;
+    color: white;
+    padding: 20px 45px;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+
+  .cta-button:hover{
+    background-color: orange;
+  }
+  
+  .image-content img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    margin-right: 200px;
+  }
+.about{
+    display: flex;
+    justify-content: space-between;
+    background-image: url(images/New\ back.jpg);
+    background-size: cover;
+    padding: 100px;
+}
+.text-about{
+    max-width: 50%;
+    margin-left: 135px;
+    margin-bottom: 1rem;
+}
+.text-about h1{
+    font-size: 54px;
+    line-height: 60px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #a325cf;
+
+}
+.text-about p{
+    font-size: 1.1rem;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 15px;
+
+}
+.a-button{
+  background-color: black;
+  color: white;
+  padding: 15px 45px;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: 0.3s ease;
+  margin-top: 10px;
+  
+}
+
+.a-button:hover{
+  background-color: orange;
+}

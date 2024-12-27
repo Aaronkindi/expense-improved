@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="form-container">
+            <div class="image-content">
+                <img src="images/6963.jpg" alt="Image" class="login-image">
+            </div>
+            <div class="form-content">
+                <h2>Welcome friend!</h2>
+                <p class="welcome-text">We're glad to have you!</p>
+
+                <form action="register.php" method="POST">
+                    <input type="text" placeholder="Username" class="input-field" id="username" name="username" required>
+                    <input type="email" placeholder="email" class="input-field" id="email" name="email"  required>
+                    <input type="password" placeholder="Password" id="password" name="password" class="input-field" required>
+                 
+
+                    <button type="submit" class="btn-get-started">Sign up</button>
+                </form>
+
+                <p class="sign-up-text">Are you a member? <a href="signin.html">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
