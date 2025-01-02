@@ -1,0 +1,243 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 200vh;
+    width: 80px;
+    background-color: #17073D;
+    padding: .4rem .8rem;
+    transition: all 0.5s ease;
+}
+
+.sidebar.active ~ .main-content {
+    left: 200px;
+    width: calc(100%-200px);
+}
+
+.sidebar.active {
+    width: 200px; 
+}
+
+.sidebar #btn {
+    position: absolute;
+    color: #fff;
+    top: .4rem;
+    left: 50%;
+    font-size: 1.2rem;
+    line-height: 50px;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.sidebar.active #btn {
+    left: 90%;
+}
+
+.sidebar .top .logo {
+    color: #fff;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.sidebar.active .top .logo {
+    opacity: 1;
+}
+
+.top .logo {
+    font-size: 2rem;
+    margin-right: 5px;
+}
+
+/* User Profile Styles */
+.user {
+    display: flex;
+    align-items: column;
+    margin: 1rem 0;
+    padding-right: 5px;
+}
+
+.user p {
+    color: #fff;
+    opacity: 1;
+    margin-left: 1rem;
+}
+
+.user-img {
+    width: auto;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #eee;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+/* Sidebar List Styles */
+.sidebar ul li {
+    position: relative;
+    list-style-type: none;
+    height: 50px;
+    width: 90%;
+    margin: 0.8rem auto;
+    line-height: 50px;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 0.8rem;
+}
+
+.sidebar ul li a:hover {
+    background-color: #fff;
+    color: #12171e;
+}
+
+.sidebar ul li a i {
+    min-width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 12px;
+    line-height: 50px;
+}
+
+.sidebar .nav-item {
+    opacity: 0;
+}
+
+.sidebar.active .nav-item {
+    opacity: 1;
+}
+
+.sidebar ul li .tootip {
+    position: absolute;
+    left: 125px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0.5rem 0.8rem rgba(77, 76, 76, 0.2);
+    border-radius: .6rem;
+    padding: .4rem 1.2rem;
+    line-height: 1.8rem;
+    z-index: 20;
+    opacity: 0;
+}
+
+.sidebar ul li:hover .tootip {
+    opacity: 1;
+    color: black;
+}
+
+.sidebar.active ul li .tootip {
+    display: none;
+}
+
+/* Main Content Styles */
+.main {
+    position: relative;
+    background-color: white;
+    height: 200vh;
+    top: 0;
+    left: 80px; /* Matches the initial width of the sidebar */
+    transition: all 0.5s ease;
+    width: calc(100% - 80px); /* Adjusts to the initial sidebar width */
+    padding: 1rem;
+}
+
+.sidebar.active ~ .main {
+    left: 250px; /* Matches the expanded sidebar width */
+    width: calc(100% - 250px); /* Adjusts to the expanded sidebar width */
+}
+
+.container{
+    line-height: 30px;
+}
+.container h3 {
+font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 30px;
+}
+.container p{
+    font-family: "Roboto", serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.card-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    gap: 10px;
+}
+.overview{
+    background-color: #D9D9D9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 290px;
+    height: 150px;
+    overflow: hidden;
+}
+.overview .text-des{
+    color: black;
+    font-size: 10px;
+    font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+.overview .num{
+    color: black;
+    font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 50px;
+
+}
+.overview-1{
+    background-color: #17073D;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 290px;
+    height: 150px;
+    overflow: hidden;
+}
+.overview-1 .text-des{
+    color: white;
+    font-size: 10px;
+    font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+  margin-left: 10px;
+  margin-top: 5px;
+
+}
+.overview-1 .num{
+    color: white;
+    font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 50px;
+
+}
