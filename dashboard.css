@@ -168,6 +168,7 @@ font-family: "Roboto", serif;
     width: 290px;
     height: 150px;
     overflow: hidden;
+    border: 1px solid black;
 }
 .overview .text-des{
     color: black;
@@ -195,6 +196,7 @@ font-family: "Roboto", serif;
     width: 290px;
     height: 150px;
     overflow: hidden;
+    
 }
 .overview-1 .text-des{
     color: white;
@@ -223,6 +225,8 @@ font-family: "Roboto", serif;
     gap: 10px;
 }
 .ex-con{
+    display: flex;
+    justify-content: space-between;
     background-color: #D9D9D9;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -230,6 +234,7 @@ font-family: "Roboto", serif;
     height: 450px;
     overflow: hidden;
     margin-top: 20px;
+    border: 1px solid black;
 
 }
 
@@ -243,6 +248,12 @@ font-family: "Roboto", serif;
   margin-top: 5px;
 }
 
+.ex-con i{
+    margin-right: 10px;
+    font-size: 20px;
+    margin-top: 4px;
+}
+
 
 .gr{
     background-color: #D9D9D9;
@@ -252,6 +263,7 @@ font-family: "Roboto", serif;
     height: 450px;
     overflow: hidden;
     margin-top: 20px;
+    border: 1px solid black;
 }
 
 .gr-1{
