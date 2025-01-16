@@ -80,6 +80,15 @@
     font-weight: 600;
 }
 
+.btn-ex{
+    background-color: #17073D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
 /* Sidebar List Styles */
 .sidebar ul li {
     position: relative;
@@ -218,6 +227,33 @@ font-family: "Roboto", serif;
   font-size: 50px;
 
 }
+
+/* Dropdown container styles */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Hidden dropdown menu */
+.dropdown {
+    display: none; /* Initially hidden */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #17073D;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Smooth sliding */
+    z-index: 100;
+}
+
+
+
+
 .expenses{
     display: flex;
     flex-wrap: wrap;
@@ -277,4 +313,94 @@ font-family: "Roboto", serif;
     margin-left: 10px;
     overflow: hidden;
 
+}
+
+/* Popup background */
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9); /* Slightly smaller initially */
+    background-color: white;
+    padding: 80px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0; /* Start invisible */
+}
+
+.popupForm.show .popup-content {
+    transform: translate(-50%, -50%) scale(1); /* Full size */
+    opacity: 1; /* Fully visible */
+}
+
+/* Popup content */
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 80px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.popup-content h2{
+    font-size: 22px;
+    font-family: "Roboto", serif;
+    font-weight: 700;
+    font-style: normal;
+    margin-left: 10px;
+    text-align: center;
+    color: #17073D;
+}
+
+
+.popup-content select{
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+.popup-content select option{
+    color: black;
+}
+.popup-content input{
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+.btn-get-started {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background-color:#121032;;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-get-started:hover {
+    background-color: orange;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
 }
