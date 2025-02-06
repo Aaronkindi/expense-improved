@@ -36,7 +36,7 @@ if ($stmt = $con->prepare('SELECT id, password FROM users WHERE username = ?')) 
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $id;
-            header('Location: dashboard.html');
+            header('Location: dashboard.php');
             exit();
         } else {
             echo 'Incorrect password!';
