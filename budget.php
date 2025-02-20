@@ -26,14 +26,14 @@ if (isset($_POST['budget'], $_POST['currencies']) && isset($_SESSION['id'])) {
     
 
     // Update the existing budget for the user or insert if no budget exists
-    if ($stmt = $con->prepare('UPDATE budgets SET budget_amount = ?, currency = ? WHERE user_id = ?')) {
+    if ($stmt = $con->prepare('UPDATE budgets SET budget_amount = ?, currency = ?, budget_date = CURRENT_TIMESTAMP WHERE user_id = ?')) {
         $stmt->bind_param('dsi', $budget, $currency, $user_id);
         $stmt->execute();
 
         // Check if a row was updated
         if ($stmt->affected_rows === 0) {
             // If no row was updated, insert a new budget (first-time setup)
-            $stmt = $con->prepare('INSERT INTO budgets (user_id, budget_amount, currency) VALUES (?, ?, ?)');
+            $stmt = $con->prepare('INSERT INTO budgets (user_id, budget_amount, currency, budget_date ) VALUES (?, ?, ?, CURRENT_TIMESTAMP)');
             $stmt->bind_param('ids', $user_id, $budget, $currency);
             $stmt->execute();
         }
@@ -44,10 +44,7 @@ if (isset($_POST['budget'], $_POST['currencies']) && isset($_SESSION['id'])) {
     } else {
         echo 'Failed to prepare statement!';
     }
-} else {
-    echo 'Please ensure all required fields are filled in.';
-}
-
+} 
 
 $con->close();
 ?>
@@ -71,7 +68,7 @@ $con->close();
 
                 <form action="" method="POST"> <!-- Action points to the same file -->
                 <label for="currency">Choose your currency</label>
-                    <select name="currencies" id="currencies">
+                    <select name="currencies" id="currencies" class="options" required>
                         <option value="R">R</option>
                         <option Value="FC">FC</option>
                         <option value="$">$</option>

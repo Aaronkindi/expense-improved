@@ -46,7 +46,7 @@ if ($stmt = $conn->prepare('INSERT INTO users (password, email, username) VALUES
     $stmt->execute();
 
     // Redirect to the signin page after successful registration
-    header('Location: dasboard.php');
+    header('Location: dashboard.php');
     exit();
 } else {
     echo 'Failed to prepare statement!';

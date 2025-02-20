@@ -21,8 +21,8 @@ if (mysqli_connect_errno()) {
     exit;
 }
 
-// Query to fetch the expenses for the current day
-$stmt = $con->prepare('SELECT amount, expense FROM expenses WHERE user_id = ? AND DATE(expense_date) = CURDATE()');
+// Query to fetch total expenses for the current month
+$stmt = $con->prepare('SELECT amount, expense FROM expenses WHERE user_id = ? AND  MONTH(expense_date) = MONTH(CURDATE())');
 if ($stmt) {
     $stmt->bind_param('i', $_SESSION['id']);
     $stmt->execute();

@@ -257,6 +257,33 @@ main.blur{
     opacity: 0.8;
     gap: 10px;
 }
+.history{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 210px;
+    background-color: #FECB6E;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.history h3{
+    font-size: 30px;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+    margin-top: -50px;
+    margin-left: -15px;
+}
+
+.history p{
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+    margin-top: 10px;
+}
 .budget {
     display: flex;
     flex-direction: column;
@@ -341,7 +368,7 @@ main.blur{
 .num {
     display:flex;
     align-items: center;
-    font-size: 30px;
+    font-size: 18px;
     font-weight: 700;
     font-style: normal;
     color: #17073D;
@@ -349,6 +376,17 @@ main.blur{
     padding-right: 80px;
 }
 
+.para {
+    display:flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    font-style: normal;
+    color: #17073D;
+    margin-top: 5px;
+    padding-right: 80px;
+
+}
 .expenses{
     display: flex;
     justify-content: space-between;
@@ -421,6 +459,31 @@ main.blur{
     font-style: normal;
     margin-top: -70px;
 }
+
+/*chart */
+
+.gr {
+    text-align: center; /* Center horizontally */
+    height: 100vh; /* Set a height for the container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .chart {
+    display: inline-block; /* Ensure the canvas behaves like a block element */
+  }
+  .btn-del{
+    background-color: #121032;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
 /* Popup background */
 .popup-content {
     position: absolute;
@@ -518,4 +581,49 @@ main.blur{
 
 .popupForm.show ~ .main-content {
     filter: blur(5px); /* Apply the blur effect */
+}
+
+.logoutform{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 80px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10001;
+}
+
+.logout-content h2{
+    font-size: 22px;
+    font-family: "Roboto", serif;
+    font-weight: 700;
+    font-style: normal;
+    margin-left: 10px;
+    text-align: center;
+    color: #17073D;
+}
+.logoutform.show {
+    display: block;
+}
+
+.logoutform {
+    display: none;
+}
+
+
+.backdrop2{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
+.backdrop2.show{
+    display: block;
 }

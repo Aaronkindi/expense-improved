@@ -1,5 +1,5 @@
 <?php
-// Start session
+//session start
 session_start();
 
 // Database connection
@@ -25,29 +25,10 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-// Query to fetch the budget amount and currency from the database
-$stmt = $con->prepare('SELECT budget_amount, currency FROM budgets WHERE user_id = ?');
-if ($stmt) {
-    $stmt->bind_param('i', $_SESSION['id']);
-    $stmt->execute();
-    $stmt->store_result();
 
-    // Check if the user has a budget set
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($response['amount'], $response['currency']);
-        $stmt->fetch();
-    } else {
-        // Handle case where no budget exists for the user
-        $response['amount'] = 0.0;
-        $response['currency'] = 'R';
-    }
 
-    $stmt->close();
-} else {
-    echo 'Failed to fetch the buget and currency.';
-}
-//querry to fetch and add the expenses of the current day
-$stmt = $con->prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM expenses WHERE user_id = ? AND DATE(expense_date) = CURDATE()');
+// Query to fetch and sum the monthly expenses
+$stmt = $con->prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM expenses WHERE user_id = ?');
 if ($stmt) {
     $stmt->bind_param('i', $_SESSION['id']);
     $stmt->execute();
@@ -58,39 +39,54 @@ if ($stmt) {
     echo 'Failed to fetch the expenses.';
 }
 
-// Query to fetch and sum the monthly expenses
-$stmt = $con->prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM expenses WHERE user_id = ? AND MONTH(expense_date) = MONTH(CURDATE())');
+// Query to fetch the budget amount and currency from the database
+$stmt = $con->prepare('SELECT currency FROM budgets WHERE user_id = ?');
 if ($stmt) {
     $stmt->bind_param('i', $_SESSION['id']);
     $stmt->execute();
-    $stmt->bind_result($totalmonth);
-    $stmt->fetch();
+    $stmt->store_result();
+
+    // Check if the user has a budget set
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result( $response['currency']);
+        $stmt->fetch();
+    } else {
+        // Handle case where no budget exists for the user
+        $response['currency'] = 'R';
+    }
+
     $stmt->close();
 } else {
-    echo 'Failed to fetch the expenses.';
+    echo 'Failed to fetch the buget and currency.';
 }
 
-// Calculate remaining budget
-$remaining_budget = $response['amount'] - $totalmonth;
 
-//querry to fetch the highest expense of the current day
-$stmt = $con->prepare('SELECT COALESCE(MAX(amount), 0) AS total FROM expenses WHERE user_id = ? AND DATE(expense_date) = CURDATE()');
+// Query to fetch the day with the highest spending and the sum of expenses
+$stmt = $con->prepare('
+    SELECT DATE(expense_date) AS day, SUM(amount) AS total_spent
+    FROM expenses
+    WHERE user_id = ?
+    GROUP BY DATE(expense_date)
+    ORDER BY total_spent DESC
+    LIMIT 1
+');
+
 if ($stmt) {
     $stmt->bind_param('i', $_SESSION['id']);
     $stmt->execute();
-    $stmt->bind_result($highest);
-    $stmt->fetch();
+    $stmt->bind_result($day, $total_spent);
+    if ($stmt->fetch()) {
+        $response['day'] = $day;
+        $response['total'] = number_format($total_spent, 2);
+    } else {
+        $response['day'] = 'No data';
+        $response['total'] = '0.00';
+    }
     $stmt->close();
 } else {
-    echo 'Failed to fetch the expenses.';
+    $response['day'] = 'Error';
+    $response['total'] = '0.00';
 }
-
-
-
-// Close the database connection
-mysqli_close($con);
-
-
 ?>
 
 
@@ -100,14 +96,13 @@ mysqli_close($con);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>History</title>
 </head>
 <body>
-
-<body>
-    <?php if (isset($_SESSION['success'])): ?>
+<?php if (isset($_SESSION['success'])): ?>
         <script>
             alert('<?php echo $_SESSION['success']; ?>');
             <?php unset($_SESSION['success']); ?>
@@ -153,7 +148,7 @@ mysqli_close($con);
                    
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="dashboard.php">
                         <i class="bx bx-grid-alt "></i>
                         <span class="nav-item">Dashboard</span>
                     </a>
@@ -199,112 +194,64 @@ mysqli_close($con);
                 </li>
             </ul>
         </div>
-    
-    <div class="main">
-           <div class="topbar">
-                <div class="header">
-                    <h3>Dashboard</h3>
-                    <p>Track your expenses and budget with ease</p>
-                </div>
-                <div class="date" id="dateDisplay"></div>
-           </div>
+
+        <div class="main">
+            <div class="topbar">
+                    <div class="header">
+                        <h3>History</h3>
+                        <p>Track your expenses and budget with ease</p>
+                    </div>
+                    <div class="date" id="dateDisplay"></div>
+            </div>
             <div class="main-con">
-                <div class="budgets">
-                <div class="budget">
-                    <h3>Monthly budget</h3>
-                    <p><?php echo $response['currency'] . ' ' . number_format($response['amount'], 2); ?></p>
-                </div>
-                <div class="budget-1">
-                    <h3>Total expenses today</h3>
-                    <p>  <?php echo htmlspecialchars($response['currency'] ?? 'USD') . ' ' . number_format($total, 2); ?></p>
-                </div>
-                <div class="budget-1">
-                    <h3>Total monthly expenses</h3>
-                    <p>  <?php echo htmlspecialchars($response['currency'] ?? 'USD') . ' ' . number_format($totalmonth, 2); ?></p>
-                </div>
-                
-           </div>
+                    <div class="budgets">
+                    <div class="history">
+                        <h3>Total expenses</h3>
+                        <p><?php echo $response['currency'] . ' ' . number_format($total, 2); ?></p>
+                    </div>
+                    
+                    
+            </div>
 
         <div class="expenses">
-        <div class="ex-head">
-        <p class="text-des-1">Expenses today</p>
-        <div class="list-ex" id="expenses-container">
-            <!-- Expenses will be displayed here -->
+           <div class="ex-head">
+            <p class="text-des-1">All times expenses</p>
+            <div class="list-ex" id="expenses-container">
+                <!-- Expenses will be displayed here -->
+            </div>
+            </div>
         </div>
-    </div>
-           </div>
+
+       
 
         </div>
-           
+
         <div class="main-con-2">
-        <div class="savings">
-            <div class="saving">
-            <p class="text-des">Actual budget</p>
-            <p class="num"><?php echo $response['currency'] . ' ' . number_format($remaining_budget, 1); ?></p>
-            </div>
-            <div class="saving">
-            <p class="text-des">Highest exp</p>
-            <p class="num"><?php echo htmlspecialchars($response['currency'] ?? 'USD') . ' ' . number_format($highest, 1); ?></p>
-            </div>
-           </div>
-           <div class="gr">
-           <canvas id="expenseChart" width="150" height="150"></canvas>
-           
-            </div>
-            
-
-           
-        </div>
-        
-
-
-        
-
-
-
-
-    
-            <div class="popupForm" class="popup">
-                <div class="popup-content">
-                    
-                    <span class="close-btn" onclick="closePopup()"><i class="bx bx-x"></i></span>
-                    <h2>Add expense</h2>
-                    <form action="expenses.php" method="POST">
-                        <select name="expenses" id="expenses">
-                            <option value="Rent/Mortgage">Rent/Mortgage</option>
-                            <option value="Property Tax">Property Tax</option>
-                            <option value="Electricity">Electricity</option>
-                            <option value="water">Water</option>
-                            <option value="Gas">Gas</option>
-                            <option value="Phone/data">Phone/data</option>
-                            <option value="wifi">Wifi</option>
-                            <option value="Food">Food</option>
-                            <option value="Household items">Household items</option>
-                            <option value="Education">Education</option>
-                            <option value="Fuel">Fuel</option>
-                            <option value="Car insurrance">Car insurrance</option>
-                            <option value="Car loan repayment">Car loan repayment</option>
-                            <option value="Transportation">Transport</option>
-                            <option value="Maitenance">Maintenace</option>
-                            <option value="Medical aid">Medical aid</option>
-                            <option value="Prescription">Prescription</option>
-                            <option value="Loans/Debt">Loans</option>
-                            <option value="Dining out">Dining Out</option>
-                            <option value="Streaming">Streaming</option>
-                            <option value="Leisure">Leisure</option>
-                            <option value="Miscellenous">other expenses</option>
-        
-                        </select>
-                        <input type="number" placeholder="Amount" class="input-field" id="Amount" name="Amount" required>
-                        <button type="submit" class="btn-get-started">Save</button>
-                    </form>
+            <div class="savings">
+                <div class="saving">
+                    <p class="text-des" >Highest spending day</p>
+                    <p class="num" style="font-size: 12px"><?php echo  $response['day']; ?></p>
                 </div>
-                <div class="backdrop"></div>
+                <div class="saving">
+                    <p class="text-des" >Highet amount</p>
+                    <p class="num" style="font-size: 12px"><?php echo $response['currency'] . ' ' . $response['total']; ?></p>
+                </div>
+
+                
             </div>
-           
+
+            <div class="gr">
+                <canvas class="chart" id="expensesPieChart" width="100" height="100"></canvas>
+            </div>
+
+            
         </div>
 
-        <div class="logoutform">
+       
+
+    </div>
+
+    <div class="logoutform">
                 <div class="logout-content">
                     
                     <span class="close-btn" onclick="closelogoutPopup()"><i class="bx bx-x"></i></span>
@@ -316,18 +263,11 @@ mysqli_close($con);
               
             </div>
             <div class="backdrop"></div>
-        </div>
-
-        
-    
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     
 </body>
-</html>
-<script src='expense.js'></script>
 <script>
 // Toggle sidebar
 let btn = document.querySelector('#btn');
@@ -396,5 +336,83 @@ updateDate();
 
 // Update the date every second
 setInterval(updateDate, 1000);
+
+// Fetch all expenses from the server
+
+async function fetchExpenses() {
+  try {
+    const response = await fetch("fetchAll.php");
+    const data = await response.json();
+
+    if (data.success) {
+      displayExpenses(data.expenses);
+      createPieChart(data.expenses);
+    } else {
+      console.error(data.message);
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    alert("An error occurred while fetching expenses. Please try again.");
+  }
+}
+
+function displayExpenses(expenses) {
+  const container = document.getElementById("expenses-container");
+  container.innerHTML = ""; // Clear the container
+
+  expenses.forEach((expense) => {
+    const expenseElement = document.createElement("div");
+    expenseElement.className = "expense-item";
+    expenseElement.innerHTML = `
+      <p>${expense.expense}</p>
+      <p>${expense.amount}</p>
+    `;
+    container.appendChild(expenseElement);
+  });
+}
+
+function createPieChart(expenses) {
+  const ctx = document.getElementById('expensesPieChart').getContext('2d');
+
+  const labels = expenses.map(exp => exp.expense);
+  const amounts = expenses.map(exp => exp.amount);
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Expenses Breakdown',
+        data: amounts,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Expenses Distribution'
+        }
+      }
+    }
+  });
+}
+
+// Call the function to fetch expenses and render the chart
+fetchExpenses();
+
 </script>
 </html>
